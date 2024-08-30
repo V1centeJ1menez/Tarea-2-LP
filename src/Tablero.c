@@ -32,7 +32,7 @@ void inicializarTablero(int tamano) {
                 return;
             }
             // Inicializar la celda con 'O'
-            *(char *)(tablero[i][j]) = 'O';
+            *(char *)(tablero[i][j]) = ' ';
         }
     }
 }
