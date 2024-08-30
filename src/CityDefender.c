@@ -1,9 +1,7 @@
-#include <stdlib.h>
 #include <stdio.h>
-
-/* Partes principales */
-#include "Cartas.h"
+#include <stdlib.h>
 #include "Tablero.h"
+#include "Cartas.h"
 
 int main(int argc, char const *argv[]) {
     (void)argc;
@@ -11,7 +9,8 @@ int main(int argc, char const *argv[]) {
     
     int tamano = 0; // Tamaño del tablero
     int opcion = 0; // Opción seleccionada por el usuario
-
+    int turnosRestantes = 0; // Número de turnos restantes
+    
     while (1) {
         // Mostrar el menú de selección de dificultad
         printf("Selecciona la Dificultad:\n");
@@ -28,31 +27,51 @@ int main(int argc, char const *argv[]) {
         switch (opcion) {
             case 1:
                 tamano = 11;
+                turnosRestantes = 30; // Límite de turnos para Fácil
                 break;
             case 2:
                 tamano = 17;
+                turnosRestantes = 35; // Límite de turnos para Medio
                 break;
             case 3:
                 tamano = 21;
+                turnosRestantes = 15; // Límite de turnos para Difícil
                 break;
             case 4:
                 printf("Saliendo...\n");
-                liberarTablero(); // Asegúrate de liberar el tablero antes de salir
+                // Liberar ultimo tablero
+                liberarTablero();
+                liberarMano();
                 return 0; // Salir del programa
             default:
                 printf("Opción no válida. Inténtelo de nuevo.\n");
                 continue;
         }
 
-        // Liberar el tablero antes de inicializar uno nuevo
-        liberarTablero();
         
-        // Inicializar el tablero
+        // Inicializar el tablero - Colocar los barcos en el tablero - Mostrar tablero
         inicializarTablero(tamano);
-        
-        // Mostrar el tablero
+        colocarBarcos(tamano);
         mostrarTablero();
-    
+
+        inicializarFunciones();
+        inicializarMano();
+
+        while (turnosRestantes > 0) {
+            usarCarta(); // Permite usar una carta
+            
+            turnosRestantes--; // Disminuir el número de turnos restantes
+            printf("\nTurnos restantes: %d\n", turnosRestantes);
+
+            if (turnosRestantes == 0) {
+                printf("Se han agotado los turnos. Fin del juego.\n");
+                liberarTablero();
+                liberarMano();
+                break; // Salir del bucle de turnos
+            }
+        }
+        
+        
         // Esperar la entrada del usuario para continuar o salir
         printf("Presione Enter para continuar...");
         getchar(); // Para consumir el '\n' pendiente del scanf

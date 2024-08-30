@@ -68,4 +68,23 @@ void mostrarTablero();
  */
 void liberarTablero();
 
+
+/**
+ * @brief Coloca barcos en el tablero de manera aleatoria.
+ *
+ * Esta función coloca barcos de diferentes tamaños en el tablero de forma aleatoria, 
+ * asegurando que no se superpongan y que se ajusten dentro de los límites del tablero.
+ *
+ * - Barcos de tamaño 1x2, 1x3, 1x4 y 1x5 se colocan en el tablero con caracteres distintivos.
+ * - La cantidad de barcos y su tamaño varía según el tamaño del tablero, representando 
+ *   diferentes niveles de dificultad (Facil, Medio, Dificil).
+ *
+ * @param tamano Tamaño del lado del tablero (número de filas y columnas).
+ *
+ * @note Asegúrese de que el tablero ha sido inicializado antes de llamar a esta función. 
+ *       La función usa números aleatorios para colocar los barcos, por lo que el 
+ *       posicionamiento puede variar en cada ejecución.
+ */
+void colocarBarcos(int tamano);
+
 #endif

@@ -47,6 +47,7 @@ void mostrarMano();
  */
 void usarCarta();
 
+void liberarMano();
 
 
 /**
@@ -63,6 +64,7 @@ void usarCarta();
  *         - disparoLineal: 5%
  *         - disparoRadar: 10%
  */
+
 void * disparoSimple(int x, int y);
 
 /**
@@ -80,6 +82,7 @@ void * disparoSimple(int x, int y);
  *         - disparoRadar: 5%
  *         - disparo500KG: 2%
  */
+
 void * disparoGrande(int x, int y);
 
 /**
@@ -98,6 +101,7 @@ void * disparoGrande(int x, int y);
  *         - disparoRadar: 6%
  *         - disparo500KG: 2%
  */
+
 void * disparoLineal(int x, int y);
 
 /**
@@ -116,6 +120,7 @@ void * disparoLineal(int x, int y);
  *         - disparoRadar: 2%
  *         - disparo500KG: 3%
  */
+
 void * disparoRadar(int x, int y);
 
 /**
@@ -129,7 +134,26 @@ void * disparoRadar(int x, int y);
  * @param y Coordenada Y del centro del área afectada.
  * @return No retorna ninguna carta, el cañón queda incapacitado.
  */
+
 void * disparo500KG(int x, int y);
 
+void inicializarFunciones();
+
+
+typedef void* (*func_ptr)(int, int); // Tipo para puntero a función
+
+typedef enum {
+    Simple,
+    Grande,
+    Lineal,
+    Radar,
+    _500KG,
+    count
+}Funciones;
+
+extern func_ptr funciones[count];
+
+int generarNumeroAleatorio(int max); 
+void cambiarCarta(int indiceCarta, int tipoCarta); 
 
 #endif

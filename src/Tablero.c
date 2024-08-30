@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "Tablero.h"
 
 // Definir las variables globales del tablero y el tamaño
@@ -31,7 +32,7 @@ void inicializarTablero(int tamano) {
                 perror("Error al asignar memoria para la celda del tablero");
                 return;
             }
-            // Inicializar la celda con 'O'
+            // Inicializar la celda con ' '
             *(char *)(tablero[i][j]) = ' ';
         }
     }
@@ -65,7 +66,6 @@ void mostrarTablero() {
     }
 }
 
-
 void liberarTablero() {
     if (tablero != NULL) {
         // Liberar cada celda del tablero
@@ -79,5 +79,95 @@ void liberarTablero() {
         // Liberar el array de filas del tablero
         free(tablero);
         tablero = NULL;
+    }
+}
+
+void colocarBarcos(int tamano) {
+    srand(time(NULL)); // Inicializa el generador de números aleatorios
+
+    // Barcos y tamaños según la dificultad
+    struct {
+        int cantidad;
+        int tamaño;
+        char simbolo;
+    } barcos[] = {
+        {2, 2, '2'},  // 2 barcos de tamaño 1x2
+        {1, 3, '3'},  // 1 barco de tamaño 1x3
+        {1, 4, '4'},  // 1 barco de tamaño 1x4
+        {1, 5, '5'}   // 1 barco de tamaño 1x5
+    };
+
+    // Ajustar los barcos según la dificultad
+    if (tamano == 11) { // Facil
+        barcos[0].cantidad = 2;
+        barcos[1].cantidad = 1;
+        barcos[2].cantidad = 1;
+        barcos[3].cantidad = 1;
+    } else if (tamano == 17) { // Medio
+        barcos[0].cantidad = 3;
+        barcos[1].cantidad = 2;
+        barcos[2].cantidad = 1;
+        barcos[3].cantidad = 1;
+    } else if (tamano == 21) { // Dificil
+        barcos[0].cantidad = 3;
+        barcos[1].cantidad = 2;
+        barcos[2].cantidad = 2;
+        barcos[3].cantidad = 2;
+    }
+
+    int numBarcos = sizeof(barcos) / sizeof(barcos[0]);
+
+    for (int b = 0; b < numBarcos; b++) {
+        for (int k = 0; k < barcos[b].cantidad; k++) {
+            int largo = barcos[b].tamaño;
+            char simbolo = barcos[b].simbolo;
+            int x, y;
+            int orientacion = rand() % 2; // 0 = horizontal, 1 = vertical
+            int colocado = 0;
+
+            while (!colocado) {
+                if (orientacion == 0) { // Horizontal
+                    x = rand() % tamano;
+                    y = rand() % (tamano - largo + 1);
+
+                    // Verificar si hay espacio para colocar el barco
+                    int espacioLibre = 1;
+                    for (int l = 0; l < largo; l++) {
+                        if (*(char *)(tablero[x][y + l]) != ' ') {
+                            espacioLibre = 0;
+                            break;
+                        }
+                    }
+
+                    if (espacioLibre) {
+                        // Colocar el barco
+                        for (int l = 0; l < largo; l++) {
+                            *(char *)(tablero[x][y + l]) = simbolo;
+                        }
+                        colocado = 1;
+                    }
+                } else { // Vertical
+                    x = rand() % (tamano - largo + 1);
+                    y = rand() % tamano;
+
+                    // Verificar si hay espacio para colocar el barco
+                    int espacioLibre = 1;
+                    for (int l = 0; l < largo; l++) {
+                        if (*(char *)(tablero[x + l][y]) != ' ') {
+                            espacioLibre = 0;
+                            break;
+                        }
+                    }
+
+                    if (espacioLibre) {
+                        // Colocar el barco
+                        for (int l = 0; l < largo; l++) {
+                            *(char *)(tablero[x + l][y]) = simbolo;
+                        }
+                        colocado = 1;
+                    }
+                }
+            }
+        }
     }
 }

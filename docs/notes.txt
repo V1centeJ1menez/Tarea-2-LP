@@ -46,7 +46,7 @@ no se ha disparado.
 - Se selecciona una carta y luego el sistema pide ingresar una coordenada del tablero como objetivo del misil y la carta es usada.
 - El sistema luego escoge aleatoriamente otro tipo de carta (o la misma) dependiendo del estado actual del cañon producto del disparo realizado.
 - Para la implementacion de este sistema, cada carta puede ser representado por un puntero a una funcion que recibe dos parametros (las coordenadas del tablero), y que retorne otro puntero a una funcion del mismo tipo de funcion
-- Las cartas son ilimitadas (a excepción de una)
+- Las cartas son ilimitadas (a excepción de una) qu es la de 500KG pq deja incapacitado el cañon permanentemente.
 
 
 
