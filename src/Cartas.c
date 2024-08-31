@@ -96,10 +96,11 @@ void * disparoLineal(int x, int y) {
             // Verificar que la columna está dentro de los límites del tablero
             if (x0 >= 0 && x0 < tamanoTablero && j >= 0 && j < tamanoTablero) {
                 char *celda = (char *)tablero[x0][j]; // Convertir el puntero a char
-                if (*celda == ' ') {
+                if (*celda == ' ' || *celda == 'O') {
                     // Si está vacío, se considera un fallo
                     *celda = 'O'; // Marcamos el fallo en el tablero
-                } else if (*celda != 'O') {
+    
+                } else {
                     // Si hay algo, se considera un acierto
                     *celda = 'X'; // Marcamos el acierto en el tablero
                 }
@@ -110,10 +111,11 @@ void * disparoLineal(int x, int y) {
             // Verificar que la fila está dentro de los límites del tablero
             if (i >= 0 && i < tamanoTablero && y0 >= 0 && y0 < tamanoTablero) {
                 char *celda = (char *)tablero[i][y0]; // Convertir el puntero a char
-                if (*celda == ' ') {
+                if (*celda == ' ' || *celda == 'O') {
                     // Si está vacío, se considera un fallo
                     *celda = 'O'; // Marcamos el fallo en el tablero
-                } else if (*celda != 'O') {
+    
+                } else {
                     // Si hay algo, se considera un acierto
                     *celda = 'X'; // Marcamos el acierto en el tablero
                 }
@@ -140,8 +142,8 @@ void *disparoRadar(int x, int y) {
                 char *celda = (char *)tablero[i][j]; // Convertir el puntero a char
                 if (*celda == ' ' || *celda == 'O') {
                     // Si está vacío, se considera un fallo y se marca con '0'
-                    *celda = '0';
-                } else if (*celda != 'X') {
+                    *celda = 'O';
+                } else { 
                     // Si hay un barco, se marca con 'X'
                     *celda = 'X';
                 }
@@ -166,9 +168,12 @@ void *disparo500KG(int x, int y) {
             // Verificar que las coordenadas estén dentro de los límites del tablero
             if (i >= 0 && i < tamanoTablero && j >= 0 && j < tamanoTablero) {
                 char *celda = (char *)tablero[i][j]; // Convertir el puntero a char
-                if (*celda != 'X') {
-                    // Marcar todas las celdas afectadas con '0' si no hay un acierto
-                    *celda = '0';
+                if (*celda == ' ' || *celda == 'O') {
+                    // Si está vacío, se considera un fallo y se marca con '0'
+                    *celda = 'O';
+                } else { 
+                    // Si hay un barco, se marca con 'X'
+                    *celda = 'X';
                 }
             }
         }
@@ -307,6 +312,7 @@ void cambiarCarta(int indiceCarta, int tipoCarta) {
         else if (random < 100) {
             Cartas.carta[indiceCarta] = (void *)funciones[Radar];
         }
+ 
     } else if (tipoCarta == Grande) {
         // disparoSimple: 80%
         if (random < 80) {
@@ -328,6 +334,7 @@ void cambiarCarta(int indiceCarta, int tipoCarta) {
         else {
             Cartas.carta[indiceCarta] = (void *)funciones[_500KG];
         }
+
     } else if (tipoCarta == Lineal) {
         // disparoSimple: 85%
         if (random < 85) {
@@ -349,6 +356,7 @@ void cambiarCarta(int indiceCarta, int tipoCarta) {
         else {
             Cartas.carta[indiceCarta] = (void *)funciones[_500KG];
         }
+
     } else if (tipoCarta == Radar) {
         // disparoSimple: 75%
         if (random < 75) {
@@ -370,9 +378,11 @@ void cambiarCarta(int indiceCarta, int tipoCarta) {
         else {
             Cartas.carta[indiceCarta] = (void *)funciones[_500KG];
         }
+       
     } else if (tipoCarta == _500KG) {
         // No se cambia la carta y se incapacita el cañón
         Cartas.disponibles--;
+        // Se acabaron las nuclearesss
         if (Cartas.disponibles <= 0) {
             printf("No hay más cartas disponibles.\n");
             liberarMano();
