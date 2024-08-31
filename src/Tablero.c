@@ -3,9 +3,11 @@
 #include <time.h>
 #include "Tablero.h"
 
+
 // Definir las variables globales del tablero y el tamaño
 void ***tablero = NULL;
-static int tamanoTablero = 0; // Variable global para almacenar el tamaño del tablero
+int tamanoTablero = 0; // Variable global para almacenar el tamaño del tablero
+
 
 void inicializarTablero(int tamano) {
     tamanoTablero = tamano; // Almacenar el tamaño en la variable global
@@ -14,7 +16,7 @@ void inicializarTablero(int tamano) {
     tablero = (void ***)malloc(tamano * sizeof(void **));
     if (tablero == NULL) {
         perror("Error al asignar memoria para las filas del tablero");
-        return;
+        exit(EXIT_FAILURE); // Asegúrate de salir si no se puede asignar memoria
     }
 
     for (int i = 0; i < tamano; i++) {
@@ -22,7 +24,7 @@ void inicializarTablero(int tamano) {
         tablero[i] = (void **)malloc(tamano * sizeof(void *));
         if (tablero[i] == NULL) {
             perror("Error al asignar memoria para las columnas del tablero");
-            return;
+            exit(EXIT_FAILURE); // Asegúrate de salir si no se puede asignar memoria
         }
 
         for (int j = 0; j < tamano; j++) {
@@ -30,7 +32,7 @@ void inicializarTablero(int tamano) {
             tablero[i][j] = malloc(sizeof(char));
             if (tablero[i][j] == NULL) {
                 perror("Error al asignar memoria para la celda del tablero");
-                return;
+                exit(EXIT_FAILURE); // Asegúrate de salir si no se puede asignar memoria
             }
             // Inicializar la celda con ' '
             *(char *)(tablero[i][j]) = ' ';
@@ -38,14 +40,25 @@ void inicializarTablero(int tamano) {
     }
 }
 
+
+
 void mostrarTablero() {
     // Imprimir la fila de números de columna
     printf("   ");
     for (int j = 0; j < tamanoTablero; j++) {
-        printf("| %c ", ' '); // Espacio en blanco para la separación de celdas
-    }
+        if (j < 9) {
+            printf("| %d ", j + 1); // Números de columna de 1 a 9 (ajustado para un dígito)
+        } else {
+            printf("|%d ", j + 1); // Números de columna de 10 en adelante (ajustado para dos dígitos)
+        }
+    }   
     printf("|\n");
-
+    printf("---");
+    for (int j = 0; j < tamanoTablero; j++) {
+            printf("|---"); // Separadores entre celdas
+        }
+        printf("|\n");
+    
     for (int i = 0; i < tamanoTablero; i++) {
         // Imprimir el número de fila al principio de cada fila, ajustado para ser 1-indexed
         printf("%2d ", i + 1);
@@ -58,7 +71,7 @@ void mostrarTablero() {
         printf("|\n");
 
         // Imprimir una línea horizontal después de cada fila
-        printf("   ");
+        printf("---");
         for (int j = 0; j < tamanoTablero; j++) {
             printf("|---"); // Separadores entre celdas
         }
@@ -66,21 +79,6 @@ void mostrarTablero() {
     }
 }
 
-void liberarTablero() {
-    if (tablero != NULL) {
-        // Liberar cada celda del tablero
-        for (int i = 0; i < tamanoTablero; i++) {
-            for (int j = 0; j < tamanoTablero; j++) {
-                free(tablero[i][j]);
-            }
-            // Liberar cada fila del tablero
-            free(tablero[i]);
-        }
-        // Liberar el array de filas del tablero
-        free(tablero);
-        tablero = NULL;
-    }
-}
 
 void colocarBarcos(int tamano) {
     srand(time(NULL)); // Inicializa el generador de números aleatorios
@@ -169,5 +167,22 @@ void colocarBarcos(int tamano) {
                 }
             }
         }
+    }
+}
+
+
+void liberarTablero() {
+    if (tablero != NULL) {
+        // Liberar cada celda del tablero
+        for (int i = 0; i < tamanoTablero; i++) {
+            for (int j = 0; j < tamanoTablero; j++) {
+                free(tablero[i][j]);
+            }
+            // Liberar cada fila del tablero
+            free(tablero[i]);
+        }
+        // Liberar el array de filas del tablero
+        free(tablero);
+        tablero = NULL;
     }
 }

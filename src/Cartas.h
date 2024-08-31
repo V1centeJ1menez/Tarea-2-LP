@@ -15,6 +15,7 @@ typedef struct Mano
     int disponibles;    /**< Número de cartas disponibles para usar. */
 } Mano;
 
+
 /**
  * @brief Variable global que representa la mano del jugador.
  *
@@ -22,6 +23,7 @@ typedef struct Mano
  * la cual almacena las cartas actuales que tiene el jugador en su mano.
  */
 extern Mano Cartas;
+
 
 /**
  * @brief Inicializa la mano del jugador con cinco cartas de disparo simple.
@@ -31,6 +33,7 @@ extern Mano Cartas;
  */
 void inicializarMano();
 
+
 /**
  * @brief Muestra en pantalla las cartas disponibles en la mano del jugador.
  *
@@ -38,6 +41,7 @@ void inicializarMano();
  * actualmente disponibles en la mano del jugador.
  */
 void mostrarMano();
+
 
 /**
  * @brief Usa una carta de la mano disponible.
@@ -47,6 +51,13 @@ void mostrarMano();
  */
 void usarCarta();
 
+
+/**
+ * @brief Libera la memoria ocupada por la mano del jugador.
+ *
+ * Esta función libera la memoria asignada para la mano del jugador, incluyendo 
+ * las cartas y cualquier otro recurso asociado.
+ */
 void liberarMano();
 
 
@@ -67,6 +78,7 @@ void liberarMano();
 
 void * disparoSimple(int x, int y);
 
+
 /**
  * @brief Dispara un gran misil con un área de efecto de 3x3 celdas.
  *
@@ -84,6 +96,7 @@ void * disparoSimple(int x, int y);
  */
 
 void * disparoGrande(int x, int y);
+
 
 /**
  * @brief Dispara múltiples misiles en un área de 1x5 o 5x1 celdas.
@@ -104,6 +117,7 @@ void * disparoGrande(int x, int y);
 
 void * disparoLineal(int x, int y);
 
+
 /**
  * @brief Dispara un misil radar que revela información sobre un área de 5x5 celdas.
  *
@@ -123,6 +137,7 @@ void * disparoLineal(int x, int y);
 
 void * disparoRadar(int x, int y);
 
+
 /**
  * @brief Dispara un misil de 500KG que afecta un área de 11x11 celdas.
  *
@@ -137,11 +152,26 @@ void * disparoRadar(int x, int y);
 
 void * disparo500KG(int x, int y);
 
+/**
+ * @brief Inicializa las funciones de disparo.
+ *
+ * Esta función asigna las funciones correspondientes a cada tipo de disparo
+ * en el array de punteros a función `funciones`.
+ */
 void inicializarFunciones();
 
 
+/**
+ * @brief Tipo para puntero a función que recibe dos enteros y retorna un puntero void.
+ */
 typedef void* (*func_ptr)(int, int); // Tipo para puntero a función
 
+
+/**
+ * @brief Enum de los tipos de funciones de disparo.
+ *
+ * Enum que define los diferentes tipos de funciones de disparo disponibles.
+ */
 typedef enum {
     Simple,
     Grande,
@@ -151,9 +181,36 @@ typedef enum {
     count
 }Funciones;
 
+
+/**
+ * @brief Array de punteros a funciones de disparo.
+ *
+ * `funciones` es un array de punteros a funciones que representan las
+ * diferentes acciones de disparo disponibles.
+ */
 extern func_ptr funciones[count];
 
+
+/**
+ * @brief Genera un número aleatorio entre 0 y el valor máximo dado.
+ *
+ * Esta función genera un número aleatorio entre 0 y el valor máximo dado.
+ *
+ * @param max Valor máximo para el número aleatorio.
+ * @return Número aleatorio generado.
+ */
 int generarNumeroAleatorio(int max); 
+
+
+/**
+ * @brief Cambia una carta en la mano del jugador.
+ *
+ * Esta función reemplaza una carta en la mano del jugador con una nueva carta
+ * del tipo especificado.
+ *
+ * @param indiceCarta Índice de la carta en la mano que se debe reemplazar.
+ * @param tipoCarta Tipo de carta con el que se reemplazará la carta actual.
+ */
 void cambiarCarta(int indiceCarta, int tipoCarta); 
 
 #endif

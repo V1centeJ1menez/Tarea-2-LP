@@ -10,6 +10,7 @@ int main(int argc, char const *argv[]) {
     int tamano = 0; // Tamaño del tablero
     int opcion = 0; // Opción seleccionada por el usuario
     int turnosRestantes = 0; // Número de turnos restantes
+    int turnoActual = 1; // Contador de turnos
     
     while (1) {
         // Mostrar el menú de selección de dificultad
@@ -40,8 +41,6 @@ int main(int argc, char const *argv[]) {
             case 4:
                 printf("Saliendo...\n");
                 // Liberar ultimo tablero
-                liberarTablero();
-                liberarMano();
                 return 0; // Salir del programa
             default:
                 printf("Opción no válida. Inténtelo de nuevo.\n");
@@ -50,17 +49,23 @@ int main(int argc, char const *argv[]) {
 
         
         // Inicializar el tablero - Colocar los barcos en el tablero - Mostrar tablero
+        printf("\nTurnos restantes: %d\n", turnosRestantes);
         inicializarTablero(tamano);
         colocarBarcos(tamano);
-        mostrarTablero();
 
         inicializarFunciones();
         inicializarMano();
 
+        // Bucle de turnos
         while (turnosRestantes > 0) {
+            printf("\n--- Turno %d ---\n", turnoActual);
+            mostrarTablero(); // Mostrar el tablero en el turno actual
+
             usarCarta(); // Permite usar una carta
             
             turnosRestantes--; // Disminuir el número de turnos restantes
+            turnoActual++;      // Incrementar el contador de turnos
+
             printf("\nTurnos restantes: %d\n", turnosRestantes);
 
             if (turnosRestantes == 0) {
@@ -71,6 +76,7 @@ int main(int argc, char const *argv[]) {
             }
         }
         
+        turnoActual = 0;
         
         // Esperar la entrada del usuario para continuar o salir
         printf("Presione Enter para continuar...");

@@ -1,7 +1,7 @@
 #ifndef H_TABLERO
 #define H_TABLERO
 
-
+extern int tamanoTablero; // Declaración externa de la variable global
 /**
  * @brief Matriz cuadrada que almacena la información de cada celda.
  *
@@ -58,18 +58,6 @@ void mostrarTablero();
 
 
 /**
- * @brief Libera la memoria asignada para el tablero.
- *
- * Esta función recorre cada celda del tablero y libera la memoria asignada para cada 
- * celda y para las filas y columnas de la matriz.
- *
- * @note Es importante llamar a esta función una vez que el tablero ya no sea necesario
- *       para evitar fugas de memoria.
- */
-void liberarTablero();
-
-
-/**
  * @brief Coloca barcos en el tablero de manera aleatoria.
  *
  * Esta función coloca barcos de diferentes tamaños en el tablero de forma aleatoria, 
@@ -86,5 +74,18 @@ void liberarTablero();
  *       posicionamiento puede variar en cada ejecución.
  */
 void colocarBarcos(int tamano);
+
+
+/**
+ * @brief Libera la memoria asignada para el tablero.
+ *
+ * Esta función recorre cada celda del tablero y libera la memoria asignada para cada 
+ * celda y para las filas y columnas de la matriz.
+ *
+ * @note Es importante llamar a esta función una vez que el tablero ya no sea necesario
+ *       para evitar fugas de memoria.
+ */
+void liberarTablero();
+
 
 #endif
