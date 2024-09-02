@@ -57,11 +57,15 @@ Para compilar y ejecutar **CityDefender**, sigue estos pasos:
    cd CityDefender
 3. Compila el proyecto utilizando el Makefile proporcionado:
    ```bash
-   make clean
-   make 
+   make clean # Limpia los archivos de compilación previos
+   make       # Compila el proyecto
 4. Ejectura el juego:
+   * Para una ejecución normal:
    ```bash
-   make run | make valgrind
+   make run 
+   * Para ejecutar el juego con Valgrind (para análisis de memoria):
+   ```bash
+   make valgrind
 
 ### Ejemplos
 
