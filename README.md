@@ -13,14 +13,22 @@ Este proyecto pone en práctica conceptos avanzados de manejo de punteros en C, 
 
 El proyecto se organiza de la siguiente manera:
 
-CityDefender/
+TAREA2LP_202373523-k/
+
 ├── src/
-│   ├── main.c         # Archivo principal del programa
+
+│   ├── CityDefender.c         # Archivo principal del programa
+
 │   ├── Tablero.c      # Implementación de las funciones relacionadas con el tablero
+
 │   ├── Tablero.h      # Declaraciones de las funciones y estructuras relacionadas con el tablero
+
 │   ├── Cartas.c       # Implementación de las funciones relacionadas con las cartas
+
 │   ├── Cartas.h       # Declaraciones de las funciones y estructuras relacionadas con las cartas
+
 ├── README.md          # Documentación del proyecto
+
 ├── Makefile           # Archivo para automatizar la compilación
 
 
