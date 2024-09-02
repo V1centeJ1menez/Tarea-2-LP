@@ -40,6 +40,24 @@ void inicializarTablero(int tamano);
 
 
 /**
+ * @brief Verifica si el juego ha terminado.
+ *
+ * Esta función comprueba el estado del tablero para determinar si todos los barcos
+ * han sido destruidos o si el número de turnos ha llegado a su límite. 
+ * Devuelve un valor entero que indica el estado del juego:
+ * - `0`: El juego continúa.
+ * - `1`: El juego ha terminado.
+ *
+ * @return Un entero que indica si el juego ha terminado o no.
+ *
+ * @note Asegúrese de que el tablero y el número de turnos estén correctamente
+ *       actualizados antes de llamar a esta función para obtener una evaluación
+ *       precisa del estado del juego.
+ */
+int verificarJuegoTerminado(); 
+
+
+/**
  * @brief Imprime el estado actual del tablero en la salida estándar.
  *
  * Esta función recorre cada celda del tablero y muestra su estado en la consola.
@@ -55,6 +73,25 @@ void inicializarTablero(int tamano);
  *       función para evitar comportamientos indefinidos.
  */
 void mostrarTablero();
+
+
+/**
+ * @brief Imprime el estado final del tablero en la salida estándar.
+ *
+ * Esta función muestra el estado final del tablero después de que el juego ha terminado.
+ * Los estados posibles de cada celda son:
+ * - `' '`: La celda no ha sido disparada.
+ * - `'O'`: El disparo ha fallado.
+ * - `'X'`: El disparo ha acertado.
+ * - `'2'`, `'3'`, `'4'`, `'5'`: Parte del barco no destruida, representando el número del barco.
+ *
+ * @param tablero Puntero triple (`void***`) que apunta al tablero a mostrar.
+ * @param tamano Tamaño del lado del tablero (número de filas y columnas).
+ *
+ * @note Asegúrese de que el tablero ha sido correctamente actualizado antes de llamar a
+ *       esta función para reflejar el estado final del juego.
+ */
+void mostrarTableroFinal();
 
 
 /**

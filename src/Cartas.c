@@ -4,12 +4,19 @@
 #include "Tablero.h"
 
 
+// Estructura global para manejar las cartas
 Mano Cartas;
 
 // Variables globales para las coordenadas
 int coordenadaX = 0;
 int coordenadaY = 0;
 
+// Bandera para verificar si la carta de 500KG ha sido usada
+// 0: no usada, 1: usada
+int flag_500KG_usada = 0; 
+
+
+// Función de disparo simple
 void * disparoSimple(int x, int y) {
     // Verificar que las coordenadas estén dentro de los límites del tablero
     if (x < 0 || x > tamanoTablero || y < 0 || y > tamanoTablero) {
@@ -27,10 +34,10 @@ void * disparoSimple(int x, int y) {
         printf("Falló el disparo en (%d, %d).\n", x, y );
         *celda = 'O'; // Marcamos el fallo en el tablero
     } else if (*celda == 'O'){
-    
+        // Si ya se había disparado previamente en esa coordenada
         printf("Has fallado de nuevo (%d, %d).\n", x, y );
     } else {
-        // Si hay algo, se considera un acierto
+        // Si hay un barco, se considera un acierto
         printf("Acierto en (%d, %d).\n", x , y );
         *celda = 'X'; // Marcamos el acierto en el tablero
     }
@@ -38,7 +45,7 @@ void * disparoSimple(int x, int y) {
     return NULL;
 }
 
-
+// Función de disparo grande (área de 3x3)
 void * disparoGrande(int x, int y) {
     // Verificar que las coordenadas estén dentro de los límites del tablero
     if (x < 1 || x > tamanoTablero || y < 1 || y > tamanoTablero) {
@@ -73,7 +80,7 @@ void * disparoGrande(int x, int y) {
     return NULL;
 }
 
-
+// Función de disparo lineal (área de 1x5 o 5x1 dependiendo de la orientación)
 void * disparoLineal(int x, int y) {
     // Verificar que las coordenadas estén dentro de los límites del tablero
     if (x < 1 || x > tamanoTablero || y < 1 || y > tamanoTablero) {
@@ -126,7 +133,7 @@ void * disparoLineal(int x, int y) {
     return NULL;
 }
 
-
+// Función de disparo radar (área de 5x5)
 void *disparoRadar(int x, int y) {
     printf("Disparo Radar con (%d, %d)\n", x, y);
 
@@ -154,14 +161,14 @@ void *disparoRadar(int x, int y) {
     return NULL;
 }
 
-
+// Función de disparo 500KG (área de 11x11)
 void *disparo500KG(int x, int y) {
     printf("Disparo 500KG con (%d, %d)\n", x, y);
 
     // Ajustar las coordenadas para que el índice del arreglo sea 0-indexed
     int x0 = x - 1;
     int y0 = y - 1;
-
+    flag_500KG_usada = 1; // 0: no usada, 1: usada
     // Recorrer el área de efecto 11x11
     for (int i = x0 - 5; i <= x0 + 5; i++) {
         for (int j = y0 - 5; j <= y0 + 5; j++) {
@@ -184,9 +191,11 @@ void *disparo500KG(int x, int y) {
 
 
 
-// Array de punteros a funciones
+// Array de punteros a funciones para manejar las cartas
 func_ptr funciones[count];
 
+
+// Inicializar el array de funciones con las diferentes cartas disponibles
 void inicializarFunciones() {
     funciones[Simple] = disparoSimple;
     funciones[Grande] = disparoGrande;
@@ -195,7 +204,7 @@ void inicializarFunciones() {
     funciones[_500KG] = disparo500KG;
 }
 
-
+// Inicializar la mano de cartas
 void inicializarMano() {
     Cartas.disponibles = 5;
     Cartas.carta = (void **)malloc(Cartas.disponibles * sizeof(void *));
@@ -236,49 +245,62 @@ void mostrarMano() {
     printf("\n");
 }
 
-// Implementación de la función usarCarta
 void usarCarta() {
     int seleccion = 0;
 
-    mostrarMano();
-    printf("Selecciona una Carta (1-%d): ", Cartas.disponibles);
-    scanf("%d", &seleccion);
-    seleccion--; // Ajustar a índice basado en 0
+    while (1) {
+        mostrarMano();
+        printf("Selecciona una Carta (1-%d): ", Cartas.disponibles);
+        scanf("%d", &seleccion);
+        seleccion--; // Ajustar a índice basado en 0
 
-    if (seleccion < 0 || seleccion >= Cartas.disponibles) {
-        printf("Selección inválida.\n");
-        return;
+        // Verificar si la selección es válida
+        if (seleccion < 0 || seleccion >= Cartas.disponibles) {
+            printf("Selección inválida. Inténtelo de nuevo.\n");
+            continue; // Volver a pedir la selección de carta
+        }
+
+        func_ptr cartaSeleccionada = (func_ptr)Cartas.carta[seleccion];
+        // Determinar el tipo de carta actual
+        int tipoCarta;
+        if (cartaSeleccionada == disparoSimple) {
+            tipoCarta = Simple;
+        } else if (cartaSeleccionada == disparoGrande) {
+            tipoCarta = Grande;
+        } else if (cartaSeleccionada == disparoLineal) {
+            tipoCarta = Lineal;
+        } else if (cartaSeleccionada == disparoRadar) {
+            tipoCarta = Radar;
+        } else if (cartaSeleccionada == disparo500KG) {
+            tipoCarta = _500KG;
+        } else {
+            printf("Carta no válida. Inténtelo de nuevo.\n");
+            continue; // Volver a pedir la selección de carta
+        }
+
+        while (1) {
+            // Leer coordenadas para el disparo
+            printf("Ingrese coordenada X (Fila): ");
+            scanf("%d", &coordenadaX);
+            printf("Ingrese coordenada Y (Columna): ");
+            scanf("%d", &coordenadaY);
+
+            // Verificar que las coordenadas estén dentro de los límites del tablero
+            if (coordenadaX < 1 || coordenadaX > tamanoTablero || coordenadaY < 1 || coordenadaY > tamanoTablero) {
+                printf("Coordenadas fuera de rango. Inténtelo de nuevo.\n");
+            } else {
+                // Coordenadas válidas, ejecutar la función de la carta seleccionada
+                cartaSeleccionada(coordenadaX, coordenadaY);
+
+                // Cambiar la carta según las probabilidades
+                cambiarCarta(seleccion, tipoCarta);
+                return; // Salir de la función después de un disparo válido
+            }
+        }
     }
-
-    func_ptr cartaSeleccionada = (func_ptr)Cartas.carta[seleccion];
-    // Determinar el tipo de carta actual
-    int tipoCarta;
-    if (cartaSeleccionada == disparoSimple) {
-        tipoCarta = Simple;
-    } else if (cartaSeleccionada == disparoGrande) {
-        tipoCarta = Grande;
-    } else if (cartaSeleccionada == disparoLineal) {
-        tipoCarta = Lineal;
-    } else if (cartaSeleccionada == disparoRadar) {
-        tipoCarta = Radar;
-    } else if (cartaSeleccionada == disparo500KG) {
-        tipoCarta = _500KG;
-    } else {
-        printf("Carta no válida.\n");
-        return;
-    }
-
-    // Leer coordenadas para el disparo
-    printf("Ingrese coordenada X (Fila): ");
-    scanf("%d", &coordenadaX);
-    printf("Ingrese coordenada Y (Columna): ");
-    scanf("%d", &coordenadaY);
-    // Ejecutar la función de la carta seleccionada
-    cartaSeleccionada(coordenadaX, coordenadaY); // Llamar la función con coordenadas arbitrarias
-
-    // Cambiar la carta según las probabilidades
-    cambiarCarta(seleccion, tipoCarta);
 }
+
+
 
 void liberarMano() {
     free(Cartas.carta);
@@ -294,95 +316,59 @@ int generarNumeroAleatorio(int max) {
 void cambiarCarta(int indiceCarta, int tipoCarta) {
     int random = generarNumeroAleatorio(99);
 
-    // Probabilidades de cambio según el tipo de carta actual
     if (tipoCarta == Simple) {
-        // disparoSimple: 65%
         if (random < 65) {
             Cartas.carta[indiceCarta] = (void *)funciones[Simple];
-        }
-        // disparoGrande: 20%
-        else if (random < 85) {
+        } else if (random < 85) {
             Cartas.carta[indiceCarta] = (void *)funciones[Grande];
-        }
-        // disparoLineal: 5%
-        else if (random < 90) {
+        } else if (random < 90) {
             Cartas.carta[indiceCarta] = (void *)funciones[Lineal];
-        }
-        // disparoRadar: 10%
-        else if (random < 100) {
+        } else {
             Cartas.carta[indiceCarta] = (void *)funciones[Radar];
         }
- 
+         
     } else if (tipoCarta == Grande) {
-        // disparoSimple: 80%
         if (random < 80) {
             Cartas.carta[indiceCarta] = (void *)funciones[Simple];
-        }
-        // disparoGrande: 3%
-        else if (random < 83) {
+        } else if (random < 83) {
             Cartas.carta[indiceCarta] = (void *)funciones[Grande];
-        }
-        // disparoLineal: 10%
-        else if (random < 93) {
+        } else if (random < 93) {
             Cartas.carta[indiceCarta] = (void *)funciones[Lineal];
-        }
-        // disparoRadar: 5%
-        else if (random < 98) {
+        } else if (random < 98 || flag_500KG_usada) { // 500KG es posible solo si no ha sido usada
             Cartas.carta[indiceCarta] = (void *)funciones[Radar];
-        }
-        // disparo500KG: 2%
-        else {
+        } else {
             Cartas.carta[indiceCarta] = (void *)funciones[_500KG];
         }
 
     } else if (tipoCarta == Lineal) {
-        // disparoSimple: 85%
         if (random < 85) {
             Cartas.carta[indiceCarta] = (void *)funciones[Simple];
-        }
-        // disparoGrande: 5%
-        else if (random < 90) {
+        } else if (random < 90) {
             Cartas.carta[indiceCarta] = (void *)funciones[Grande];
-        }
-        // disparoLineal: 2%
-        else if (random < 92) {
+        } else if (random < 92) {
             Cartas.carta[indiceCarta] = (void *)funciones[Lineal];
-        }
-        // disparoRadar: 6%
-        else if (random < 98) {
+        } else if (random < 98 || flag_500KG_usada) { // 500KG es posible solo si no ha sido usada
             Cartas.carta[indiceCarta] = (void *)funciones[Radar];
-        }
-        // disparo500KG: 2%
-        else {
+        } else {
             Cartas.carta[indiceCarta] = (void *)funciones[_500KG];
         }
 
     } else if (tipoCarta == Radar) {
-        // disparoSimple: 75%
         if (random < 75) {
             Cartas.carta[indiceCarta] = (void *)funciones[Simple];
-        }
-        // disparoGrande: 15%
-        else if (random < 90) {
+        } else if (random < 90) {
             Cartas.carta[indiceCarta] = (void *)funciones[Grande];
-        }
-        // disparoLineal: 5%
-        else if (random < 95) {
+        } else if (random < 95) {
             Cartas.carta[indiceCarta] = (void *)funciones[Lineal];
-        }
-        // disparoRadar: 2%
-        else if (random < 97) {
+        } else if (random < 97 || flag_500KG_usada) { // 500KG es posible solo si no ha sido usada
             Cartas.carta[indiceCarta] = (void *)funciones[Radar];
-        }
-        // disparo500KG: 3%
-        else {
+        } else {
             Cartas.carta[indiceCarta] = (void *)funciones[_500KG];
         }
-       
+
     } else if (tipoCarta == _500KG) {
         // No se cambia la carta y se incapacita el cañón
         Cartas.disponibles--;
-        // Se acabaron las nuclearesss
         if (Cartas.disponibles <= 0) {
             printf("No hay más cartas disponibles.\n");
             liberarMano();

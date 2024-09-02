@@ -2,6 +2,11 @@
 #define H_CARTAS
 
 
+extern int coordenadaX;       // Variable global que almacena la coordenada X seleccionada por el usuario.
+extern int coordenadaY;       // Variable global que almacena la coordenada Y seleccionada por el usuario.
+extern int flag_500KG_usada;  // Variable global que indica si la carta 'disparo500KG' ha sido usada (1 si ha sido usada, 0 si no).
+
+
 // Implementación de las cartas
 /**
  * @brief Estructura que representa la mano del jugador.
@@ -164,7 +169,7 @@ void inicializarFunciones();
 /**
  * @brief Tipo para puntero a función que recibe dos enteros y retorna un puntero void.
  */
-typedef void* (*func_ptr)(int, int); // Tipo para puntero a función
+typedef void* (*func_ptr)(int, int);
 
 
 /**

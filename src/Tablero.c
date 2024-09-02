@@ -6,7 +6,10 @@
 
 // Definir las variables globales del tablero y el tamaño
 void ***tablero = NULL;
-int tamanoTablero = 0; // Variable global para almacenar el tamaño del tablero
+
+
+// Variable global para almacenar el tamaño del tablero
+int tamanoTablero = 0; 
 
 
 void inicializarTablero(int tamano) {
@@ -41,6 +44,21 @@ void inicializarTablero(int tamano) {
 }
 
 
+// Función que verifica si todos los barcos han sido destruidos
+int verificarJuegoTerminado() {
+    for (int i = 0; i < tamanoTablero; i++) {
+        for (int j = 0; j < tamanoTablero; j++) {
+            char celda = *(char *)(tablero[i][j]);
+            if (celda >= '2' && celda <= '5') {
+                // Si encontramos alguna parte de un barco que no ha sido alcanzada, el juego continúa
+                return 0; // No se ha terminado el juego
+            }
+        }
+    }
+    // Si todas las partes de los barcos han sido alcanzadas, el juego termina
+    return 1; // Todos los barcos han sido destruidos
+}
+
 
 void mostrarTablero() {
     // Imprimir la fila de números de columna
@@ -55,9 +73,9 @@ void mostrarTablero() {
     printf("|\n");
     printf("---");
     for (int j = 0; j < tamanoTablero; j++) {
-            printf("|---"); // Separadores entre celdas
-        }
-        printf("|\n");
+        printf("|---"); // Separadores entre celdas
+    }
+    printf("|\n");
     
     for (int i = 0; i < tamanoTablero; i++) {
         // Imprimir el número de fila al principio de cada fila, ajustado para ser 1-indexed
@@ -65,7 +83,59 @@ void mostrarTablero() {
 
         for (int j = 0; j < tamanoTablero; j++) {
             // Imprimir la celda enmarcada con '|' al principio y final
-            printf("| %c ", *(char *)(tablero[i][j]));
+            char celda = *(char *)(tablero[i][j]);
+            if (celda >= '2' && celda <= '5') {
+                printf("|   ");  // Ocultar el barco mostrando un espacio
+            } else {
+                printf("| %c ", celda);
+            }
+        }
+        // Imprimir la barra vertical al final de cada fila
+        printf("|\n");
+
+        // Imprimir una línea horizontal después de cada fila
+        printf("---");
+        for (int j = 0; j < tamanoTablero; j++) {
+            printf("|---"); // Separadores entre celdas
+        }
+        printf("|\n");
+    }
+}
+
+
+// Agregar que los fallos del usuario deben imprimirse y  las demas casillas dejar en blanco
+void mostrarTableroFinal() {
+    // Imprimir la fila de números de columna
+    printf("   ");
+    for (int j = 0; j < tamanoTablero; j++) {
+        if (j < 9) {
+            printf("| %d ", j + 1); // Números de columna de 1 a 9 (ajustado para un dígito)
+        } else {
+            printf("|%d ", j + 1); // Números de columna de 10 en adelante (ajustado para dos dígitos)
+        }
+    }
+    printf("|\n");
+    printf("---");
+    for (int j = 0; j < tamanoTablero; j++) {
+        printf("|---"); // Separadores entre celdas
+    }
+    printf("|\n");
+
+    for (int i = 0; i < tamanoTablero; i++) {
+        // Imprimir el número de fila al principio de cada fila, ajustado para ser 1-indexed
+        printf("%2d ", i + 1);
+
+        for (int j = 0; j < tamanoTablero; j++) {
+            char celda = *(char *)(tablero[i][j]);
+            if (celda == 'X') {
+                printf("| X "); // Parte del barco destruida
+            } else if (celda == 'O') {
+                printf("| O "); // Disparo fallido
+            } else if (celda >= '2' && celda <= '5') {
+                printf("| %c ", celda); // Parte del barco no destruida (mostrar el número del barco)
+            } else {
+                printf("|   "); // Dejar en blanco las celdas no disparadas
+            }
         }
         // Imprimir la barra vertical al final de cada fila
         printf("|\n");

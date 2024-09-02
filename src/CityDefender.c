@@ -7,6 +7,7 @@ int main(int argc, char const *argv[]) {
     (void)argc;
     (void)argv;
     
+    // Variables principales del juego
     int tamano = 0; // Tamaño del tablero
     int opcion = 0; // Opción seleccionada por el usuario
     int turnosRestantes = 0; // Número de turnos restantes
@@ -20,11 +21,11 @@ int main(int argc, char const *argv[]) {
         printf("3. Dificil -> 21 X 21, 9 Barcos\n");
         printf("4. Salir\n");
         
-        // Leer la opción del usuario
+        // Leer la opción ingresada por el usuario
         printf("Ingrese Numero: ");
         scanf("%d", &opcion);
         
-        // Procesar la opción del usuario
+        // Procesar la opción seleccionada y configurar el juego en consecuencia
         switch (opcion) {
             case 1:
                 tamano = 11;
@@ -39,24 +40,28 @@ int main(int argc, char const *argv[]) {
                 turnosRestantes = 15; // Límite de turnos para Difícil
                 break;
             case 4:
-                printf("Saliendo...\n");
-                // Liberar ultimo tablero
+                // Opción de salida, termina el juego
+                 printf("Saliendo...\n");
                 return 0; // Salir del programa
             default:
+                // Manejo de una opción no válida
                 printf("Opción no válida. Inténtelo de nuevo.\n");
-                continue;
+                continue; // Volver a mostrar el menú
         }
 
         
-        // Inicializar el tablero - Colocar los barcos en el tablero - Mostrar tablero
+        // Inicializar el tablero de juego con el tamaño seleccionado
         printf("\nTurnos restantes: %d\n", turnosRestantes);
-        inicializarTablero(tamano);
-        colocarBarcos(tamano);
+        inicializarTablero(tamano); // Configurar el tablero según la dificultad seleccionada
+        colocarBarcos(tamano); // Colocar los barcos en el tablero
 
+        // Inicializar las funciones y la mano de cartas
         inicializarFunciones();
         inicializarMano();
 
-        // Bucle de turnos
+        
+
+        // Bucle principal de los turnos del juego
         while (turnosRestantes > 0) {
             printf("\n--- Turno %d ---\n", turnoActual);
             mostrarTablero(); // Mostrar el tablero en el turno actual
@@ -66,16 +71,33 @@ int main(int argc, char const *argv[]) {
             turnosRestantes--; // Disminuir el número de turnos restantes
             turnoActual++;      // Incrementar el contador de turnos
 
+            // Verificar si todos los barcos han sido destruidos
+            if (verificarJuegoTerminado()) {
+                printf("¡Todos los barcos han sido destruidos! Fin del juego.\n");
+
+                printf("\n--- Tablero Final ---\n");
+                mostrarTableroFinal();
+                
+                liberarTablero();
+                liberarMano();
+                break; // Salir del bucle de turnos
+            }
+            
             printf("\nTurnos restantes: %d\n", turnosRestantes);
 
+            // Verificar si se han agotado los turnos
             if (turnosRestantes == 0) {
                 printf("Se han agotado los turnos. Fin del juego.\n");
+
+                printf("\n--- Tablero Final ---\n");
+                mostrarTableroFinal();
                 liberarTablero();
                 liberarMano();
                 break; // Salir del bucle de turnos
             }
         }
         
+        // Reiniciar el contador de turnos para un nuevo juego
         turnoActual = 0;
         
         // Esperar la entrada del usuario para continuar o salir
