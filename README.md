@@ -60,6 +60,7 @@ Para compilar y ejecutar **CityDefender**, sigue estos pasos:
    make clean # Limpia los archivos de compilación previos
    make       # Compila el proyecto
 4. Ejectura el juego:
+   
    Para una ejecución normal:
    ```bash
    make run 
@@ -87,7 +88,7 @@ Selecciona la Dificultad:
 
 Después de seleccionar la dificultad, el juego se inicializará y se te pedirá que uses cartas para atacar el tablero enemigo. Cada turno te mostrará el estado actual del tablero y el número de turnos restantes.
 
-### Notas
+## Notas
 * El uso de punteros triples permite una mayor flexibilidad en la gestión de la memoria del tablero, aunque también introduce una mayor complejidad en el manejo de los datos.
 * Asegúrate de liberar toda la memoria dinámica asignada para evitar fugas de memoria.
 * Este juego es un excelente ejemplo de cómo aplicar estructuras avanzadas de datos en C.
