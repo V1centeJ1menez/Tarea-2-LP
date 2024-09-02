@@ -63,10 +63,11 @@ Para compilar y ejecutar **CityDefender**, sigue estos pasos:
    * Para una ejecución normal:
    ```bash
    make run 
+   ```
    * Para ejecutar el juego con Valgrind (para análisis de memoria):
    ```bash
    make valgrind
-
+   ``` 
 ## Descripción de Comandos de Makefile
 - make clean: Elimina los archivos generados durante la compilación, limpiando el directorio build y el archivo ejecutable.
 - make: Compila el proyecto, generando el archivo ejecutable CityDefender a partir de los archivos de origen.
