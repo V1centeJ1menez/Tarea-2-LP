@@ -84,6 +84,7 @@ Selecciona la Dificultad:
 2. Medio -> 17 X 17, 7 Barcos
 3. Dificil -> 21 X 21, 9 Barcos
 4. Salir Ingrese Numero:
+
 Después de seleccionar la dificultad, el juego se inicializará y se te pedirá que uses cartas para atacar el tablero enemigo. Cada turno te mostrará el estado actual del tablero y el número de turnos restantes.
 
 ### Notas
