@@ -13,7 +13,7 @@ Este proyecto pone en práctica conceptos avanzados de manejo de punteros en C, 
 
 El proyecto se organiza de la siguiente manera:
 
-TAREA2LP_202373523-k/
+Tarea2LP_202373523-k/
 
 ├── src/
 
