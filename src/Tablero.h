@@ -2,6 +2,7 @@
 #define H_TABLERO
 
 extern int tamanoTablero; // Declaración externa de la variable global
+
 /**
  * @brief Matriz cuadrada que almacena la información de cada celda.
  *
@@ -18,9 +19,7 @@ extern int tamanoTablero; // Declaración externa de la variable global
  * @note Dado que es una variable global, debe asegurarse que está 
  *       correctamente inicializada antes de su uso.
  */
-
-extern void *** tablero;
-
+extern void ***tablero;
 
 /**
  * @brief Inicializa el tablero cuadrado para un tamaño dado.
@@ -37,7 +36,6 @@ extern void *** tablero;
  *       una vez que ya no sea necesaria.
  */
 void inicializarTablero(int tamano);
-
 
 /**
  * @brief Verifica si el juego ha terminado.
@@ -56,7 +54,6 @@ void inicializarTablero(int tamano);
  */
 int verificarJuegoTerminado(); 
 
-
 /**
  * @brief Imprime el estado actual del tablero en la salida estándar.
  *
@@ -73,7 +70,6 @@ int verificarJuegoTerminado();
  *       función para evitar comportamientos indefinidos.
  */
 void mostrarTablero();
-
 
 /**
  * @brief Imprime el estado final del tablero en la salida estándar.
@@ -93,7 +89,6 @@ void mostrarTablero();
  */
 void mostrarTableroFinal();
 
-
 /**
  * @brief Coloca barcos en el tablero de manera aleatoria.
  *
@@ -112,7 +107,6 @@ void mostrarTableroFinal();
  */
 void colocarBarcos(int tamano);
 
-
 /**
  * @brief Libera la memoria asignada para el tablero.
  *
@@ -123,6 +117,5 @@ void colocarBarcos(int tamano);
  *       para evitar fugas de memoria.
  */
 void liberarTablero();
-
 
 #endif

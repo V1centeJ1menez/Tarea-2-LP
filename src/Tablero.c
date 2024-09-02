@@ -3,157 +3,135 @@
 #include <time.h>
 #include "Tablero.h"
 
+// Definir la variable global para almacenar el tablero y el tamaño del mismo
+void ***tablero = NULL; // Puntero triple para representar un tablero 2D dinámico
+int tamanoTablero = 0;  // Variable global para almacenar el tamaño del tablero
 
-// Definir las variables globales del tablero y el tamaño
-void ***tablero = NULL;
-
-
-// Variable global para almacenar el tamaño del tablero
-int tamanoTablero = 0; 
-
-
+// Función para inicializar el tablero con un tamaño dado
 void inicializarTablero(int tamano) {
     tamanoTablero = tamano; // Almacenar el tamaño en la variable global
 
-    // Asignar memoria para el array de punteros a punteros (N filas)
+    // Asignar memoria para las filas del tablero (array de punteros a punteros)
     tablero = (void ***)malloc(tamano * sizeof(void **));
     if (tablero == NULL) {
         perror("Error al asignar memoria para las filas del tablero");
-        exit(EXIT_FAILURE); // Asegúrate de salir si no se puede asignar memoria
+        exit(EXIT_FAILURE); // Terminar el programa si hay error de asignación
     }
 
+    // Asignar memoria para cada fila y cada celda del tablero
     for (int i = 0; i < tamano; i++) {
-        // Asignar memoria para cada fila de punteros (N columnas)
-        tablero[i] = (void **)malloc(tamano * sizeof(void *));
+        tablero[i] = (void **)malloc(tamano * sizeof(void *)); // Asignar memoria para las columnas
         if (tablero[i] == NULL) {
             perror("Error al asignar memoria para las columnas del tablero");
-            exit(EXIT_FAILURE); // Asegúrate de salir si no se puede asignar memoria
+            exit(EXIT_FAILURE); // Terminar el programa si hay error de asignación
         }
 
         for (int j = 0; j < tamano; j++) {
-            // Asignar memoria para cada celda (almacenar un char que representa el estado de la celda)
-            tablero[i][j] = malloc(sizeof(char));
+            tablero[i][j] = malloc(sizeof(char)); // Asignar memoria para cada celda
             if (tablero[i][j] == NULL) {
                 perror("Error al asignar memoria para la celda del tablero");
-                exit(EXIT_FAILURE); // Asegúrate de salir si no se puede asignar memoria
+                exit(EXIT_FAILURE); // Terminar el programa si hay error de asignación
             }
-            // Inicializar la celda con ' '
-            *(char *)(tablero[i][j]) = ' ';
+            *(char *)(tablero[i][j]) = ' '; // Inicializar la celda con un espacio en blanco
         }
     }
 }
 
-
-// Función que verifica si todos los barcos han sido destruidos
+// Función para verificar si el juego ha terminado (todos los barcos destruidos)
 int verificarJuegoTerminado() {
     for (int i = 0; i < tamanoTablero; i++) {
         for (int j = 0; j < tamanoTablero; j++) {
-            char celda = *(char *)(tablero[i][j]);
+            char celda = *(char *)(tablero[i][j]); // Obtener el contenido de la celda
             if (celda >= '2' && celda <= '5') {
-                // Si encontramos alguna parte de un barco que no ha sido alcanzada, el juego continúa
-                return 0; // No se ha terminado el juego
+                // Si hay alguna parte de un barco sin destruir, el juego no ha terminado
+                return 0; // El juego continúa
             }
         }
     }
-    // Si todas las partes de los barcos han sido alcanzadas, el juego termina
-    return 1; // Todos los barcos han sido destruidos
+    return 1; // Todos los barcos han sido destruidos, el juego ha terminado
 }
 
-
+// Función para mostrar el tablero durante el juego (ocultando barcos)
 void mostrarTablero() {
-    // Imprimir la fila de números de columna
+    // Imprimir números de columna
     printf("   ");
     for (int j = 0; j < tamanoTablero; j++) {
         if (j < 9) {
-            printf("| %d ", j + 1); // Números de columna de 1 a 9 (ajustado para un dígito)
+            printf("| %d ", j + 1); // Ajustar formato para columnas de 1 a 9
         } else {
-            printf("|%d ", j + 1); // Números de columna de 10 en adelante (ajustado para dos dígitos)
+            printf("|%d ", j + 1); // Ajustar formato para columnas de 10 en adelante
         }
-    }   
-    printf("|\n");
-    printf("---");
+    }
+    printf("|\n---");
     for (int j = 0; j < tamanoTablero; j++) {
-        printf("|---"); // Separadores entre celdas
+        printf("|---"); // Imprimir separadores entre celdas
     }
     printf("|\n");
-    
-    for (int i = 0; i < tamanoTablero; i++) {
-        // Imprimir el número de fila al principio de cada fila, ajustado para ser 1-indexed
-        printf("%2d ", i + 1);
 
+    // Imprimir cada fila del tablero
+    for (int i = 0; i < tamanoTablero; i++) {
+        printf("%2d ", i + 1); // Imprimir número de fila (1-indexado)
         for (int j = 0; j < tamanoTablero; j++) {
-            // Imprimir la celda enmarcada con '|' al principio y final
             char celda = *(char *)(tablero[i][j]);
             if (celda >= '2' && celda <= '5') {
-                printf("|   ");  // Ocultar el barco mostrando un espacio
+                printf("|   "); // Ocultar los barcos
             } else {
-                printf("| %c ", celda);
+                printf("| %c ", celda); // Mostrar disparos y espacios en blanco
             }
         }
-        // Imprimir la barra vertical al final de cada fila
-        printf("|\n");
-
-        // Imprimir una línea horizontal después de cada fila
-        printf("---");
+        printf("|\n---");
         for (int j = 0; j < tamanoTablero; j++) {
-            printf("|---"); // Separadores entre celdas
+            printf("|---"); // Imprimir separadores entre celdas
         }
         printf("|\n");
     }
 }
 
-
-// Agregar que los fallos del usuario deben imprimirse y  las demas casillas dejar en blanco
+// Función para mostrar el tablero al final del juego (revelando la ubicación de los barcos)
 void mostrarTableroFinal() {
-    // Imprimir la fila de números de columna
+    // Imprimir números de columna
     printf("   ");
     for (int j = 0; j < tamanoTablero; j++) {
         if (j < 9) {
-            printf("| %d ", j + 1); // Números de columna de 1 a 9 (ajustado para un dígito)
+            printf("| %d ", j + 1); // Ajustar formato para columnas de 1 a 9
         } else {
-            printf("|%d ", j + 1); // Números de columna de 10 en adelante (ajustado para dos dígitos)
+            printf("|%d ", j + 1); // Ajustar formato para columnas de 10 en adelante
         }
     }
-    printf("|\n");
-    printf("---");
+    printf("|\n---");
     for (int j = 0; j < tamanoTablero; j++) {
-        printf("|---"); // Separadores entre celdas
+        printf("|---"); // Imprimir separadores entre celdas
     }
     printf("|\n");
 
+    // Imprimir cada fila del tablero
     for (int i = 0; i < tamanoTablero; i++) {
-        // Imprimir el número de fila al principio de cada fila, ajustado para ser 1-indexed
-        printf("%2d ", i + 1);
-
+        printf("%2d ", i + 1); // Imprimir número de fila (1-indexado)
         for (int j = 0; j < tamanoTablero; j++) {
             char celda = *(char *)(tablero[i][j]);
             if (celda == 'X') {
-                printf("| X "); // Parte del barco destruida
+                printf("| X "); // Mostrar partes de barcos destruidos
             } else if (celda == 'O') {
-                printf("| O "); // Disparo fallido
+                printf("| O "); // Mostrar disparos fallidos
             } else if (celda >= '2' && celda <= '5') {
-                printf("| %c ", celda); // Parte del barco no destruida (mostrar el número del barco)
+                printf("| %c ", celda); // Mostrar partes de barcos no destruidos
             } else {
                 printf("|   "); // Dejar en blanco las celdas no disparadas
             }
         }
-        // Imprimir la barra vertical al final de cada fila
-        printf("|\n");
-
-        // Imprimir una línea horizontal después de cada fila
-        printf("---");
+        printf("|\n---");
         for (int j = 0; j < tamanoTablero; j++) {
-            printf("|---"); // Separadores entre celdas
+            printf("|---"); // Imprimir separadores entre celdas
         }
         printf("|\n");
     }
 }
 
-
+// Función para colocar los barcos en el tablero de manera aleatoria
 void colocarBarcos(int tamano) {
-    srand(time(NULL)); // Inicializa el generador de números aleatorios
+    srand(time(NULL)); // Inicializar el generador de números aleatorios
 
-    // Barcos y tamaños según la dificultad
+    // Definir los barcos con su tamaño y símbolo correspondiente
     struct {
         int cantidad;
         int tamaño;
@@ -165,8 +143,8 @@ void colocarBarcos(int tamano) {
         {1, 5, '5'}   // 1 barco de tamaño 1x5
     };
 
-    // Ajustar los barcos según la dificultad
-    if (tamano == 11) { // Facil
+    // Ajustar la cantidad de barcos según la dificultad
+    if (tamano == 11) { // Fácil
         barcos[0].cantidad = 2;
         barcos[1].cantidad = 1;
         barcos[2].cantidad = 1;
@@ -176,15 +154,16 @@ void colocarBarcos(int tamano) {
         barcos[1].cantidad = 2;
         barcos[2].cantidad = 1;
         barcos[3].cantidad = 1;
-    } else if (tamano == 21) { // Dificil
+    } else if (tamano == 21) { // Difícil
         barcos[0].cantidad = 3;
         barcos[1].cantidad = 2;
         barcos[2].cantidad = 2;
         barcos[3].cantidad = 2;
     }
 
-    int numBarcos = sizeof(barcos) / sizeof(barcos[0]);
+    int numBarcos = sizeof(barcos) / sizeof(barcos[0]); // Número total de tipos de barcos
 
+    // Colocar cada barco en el tablero
     for (int b = 0; b < numBarcos; b++) {
         for (int k = 0; k < barcos[b].cantidad; k++) {
             int largo = barcos[b].tamaño;
@@ -194,11 +173,11 @@ void colocarBarcos(int tamano) {
             int colocado = 0;
 
             while (!colocado) {
-                if (orientacion == 0) { // Horizontal
+                if (orientacion == 0) { // Colocación horizontal
                     x = rand() % tamano;
                     y = rand() % (tamano - largo + 1);
 
-                    // Verificar si hay espacio para colocar el barco
+                    // Verificar si hay espacio libre para el barco
                     int espacioLibre = 1;
                     for (int l = 0; l < largo; l++) {
                         if (*(char *)(tablero[x][y + l]) != ' ') {
@@ -208,17 +187,17 @@ void colocarBarcos(int tamano) {
                     }
 
                     if (espacioLibre) {
-                        // Colocar el barco
+                        // Colocar el barco en las celdas disponibles
                         for (int l = 0; l < largo; l++) {
                             *(char *)(tablero[x][y + l]) = simbolo;
                         }
-                        colocado = 1;
+                        colocado = 1; // Marcar el barco como colocado
                     }
-                } else { // Vertical
+                } else { // Colocación vertical
                     x = rand() % (tamano - largo + 1);
                     y = rand() % tamano;
 
-                    // Verificar si hay espacio para colocar el barco
+                    // Verificar si hay espacio libre para el barco
                     int espacioLibre = 1;
                     for (int l = 0; l < largo; l++) {
                         if (*(char *)(tablero[x + l][y]) != ' ') {
@@ -228,11 +207,11 @@ void colocarBarcos(int tamano) {
                     }
 
                     if (espacioLibre) {
-                        // Colocar el barco
+                        // Colocar el barco en las celdas disponibles
                         for (int l = 0; l < largo; l++) {
                             *(char *)(tablero[x + l][y]) = simbolo;
                         }
-                        colocado = 1;
+                        colocado = 1; // Marcar el barco como colocado
                     }
                 }
             }
@@ -240,7 +219,7 @@ void colocarBarcos(int tamano) {
     }
 }
 
-
+// Función para liberar la memoria asignada al tablero
 void liberarTablero() {
     if (tablero != NULL) {
         // Liberar cada celda del tablero
@@ -248,11 +227,9 @@ void liberarTablero() {
             for (int j = 0; j < tamanoTablero; j++) {
                 free(tablero[i][j]);
             }
-            // Liberar cada fila del tablero
-            free(tablero[i]);
+            free(tablero[i]); // Liberar cada fila del tablero
         }
-        // Liberar el array de filas del tablero
-        free(tablero);
-        tablero = NULL;
+        free(tablero); // Liberar el array de filas del tablero
+        tablero = NULL; // Asegurarse de que el puntero global apunte a NULL
     }
 }

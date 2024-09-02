@@ -41,25 +41,22 @@ int main(int argc, char const *argv[]) {
                 break;
             case 4:
                 // Opción de salida, termina el juego
-                 printf("Saliendo...\n");
+                printf("Saliendo...\n");
                 return 0; // Salir del programa
             default:
                 // Manejo de una opción no válida
                 printf("Opción no válida. Inténtelo de nuevo.\n");
                 continue; // Volver a mostrar el menú
         }
-
         
         // Inicializar el tablero de juego con el tamaño seleccionado
         printf("\nTurnos restantes: %d\n", turnosRestantes);
         inicializarTablero(tamano); // Configurar el tablero según la dificultad seleccionada
         colocarBarcos(tamano); // Colocar los barcos en el tablero
 
-        // Inicializar las funciones y la mano de cartas
+        // Inicializar las funciones y el mazo de cartas
         inicializarFunciones();
-        inicializarMano();
-
-        
+        inicializarMazo();
 
         // Bucle principal de los turnos del juego
         while (turnosRestantes > 0) {
@@ -76,10 +73,10 @@ int main(int argc, char const *argv[]) {
                 printf("¡Todos los barcos han sido destruidos! Fin del juego.\n");
 
                 printf("\n--- Tablero Final ---\n");
-                mostrarTableroFinal();
+                mostrarTableroFinal(); // Mostrar el estado final del tablero
                 
-                liberarTablero();
-                liberarMano();
+                liberarTablero(); // Liberar la memoria del tablero
+                liberarMazo();    // Liberar la memoria del mazo de cartas
                 break; // Salir del bucle de turnos
             }
             
@@ -90,15 +87,15 @@ int main(int argc, char const *argv[]) {
                 printf("Se han agotado los turnos. Fin del juego.\n");
 
                 printf("\n--- Tablero Final ---\n");
-                mostrarTableroFinal();
-                liberarTablero();
-                liberarMano();
+                mostrarTableroFinal(); // Mostrar el estado final del tablero
+                liberarTablero(); // Liberar la memoria del tablero
+                liberarMazo();    // Liberar la memoria del mazo de cartas
                 break; // Salir del bucle de turnos
             }
         }
         
         // Reiniciar el contador de turnos para un nuevo juego
-        turnoActual = 0;
+        turnoActual = 1;
         
         // Esperar la entrada del usuario para continuar o salir
         printf("Presione Enter para continuar...");

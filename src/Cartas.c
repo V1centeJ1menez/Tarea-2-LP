@@ -3,7 +3,6 @@
 #include "Cartas.h"
 #include "Tablero.h"
 
-
 // Estructura global para manejar las cartas
 Mano Cartas;
 
@@ -15,9 +14,8 @@ int coordenadaY = 0;
 // 0: no usada, 1: usada
 int flag_500KG_usada = 0; 
 
-
 // Función de disparo simple
-void * disparoSimple(int x, int y) {
+void *disparoSimple(int x, int y) {
     // Verificar que las coordenadas estén dentro de los límites del tablero
     if (x < 0 || x > tamanoTablero || y < 0 || y > tamanoTablero) {
         printf("Coordenadas fuera de los límites del tablero.\n");
@@ -25,20 +23,20 @@ void * disparoSimple(int x, int y) {
     }
 
     // Mostrar el disparo
-    printf("Disparo Simple con (%d, %d)\n", x , y ); // Para mostrar coordenadas 1-indexed
+    printf("Disparo Simple con (%d, %d)\n", x, y); // Para mostrar coordenadas 1-indexed
 
     // Verificar el estado del tablero en la coordenada especificada
     char *celda = (char *)tablero[x - 1][y - 1]; // Convertir el puntero a char
     if (*celda == ' ') {
         // Si está vacío, se considera un fallo
-        printf("Falló el disparo en (%d, %d).\n", x, y );
+        printf("Falló el disparo en (%d, %d).\n", x, y);
         *celda = 'O'; // Marcamos el fallo en el tablero
-    } else if (*celda == 'O'){
+    } else if (*celda == 'O') {
         // Si ya se había disparado previamente en esa coordenada
-        printf("Has fallado de nuevo (%d, %d).\n", x, y );
+        printf("Has fallado de nuevo en (%d, %d).\n", x, y);
     } else {
         // Si hay un barco, se considera un acierto
-        printf("Acierto en (%d, %d).\n", x , y );
+        printf("Acierto en (%d, %d).\n", x, y);
         *celda = 'X'; // Marcamos el acierto en el tablero
     }
 
@@ -46,7 +44,7 @@ void * disparoSimple(int x, int y) {
 }
 
 // Función de disparo grande (área de 3x3)
-void * disparoGrande(int x, int y) {
+void *disparoGrande(int x, int y) {
     // Verificar que las coordenadas estén dentro de los límites del tablero
     if (x < 1 || x > tamanoTablero || y < 1 || y > tamanoTablero) {
         printf("Coordenadas fuera de los límites del tablero.\n");
@@ -68,7 +66,6 @@ void * disparoGrande(int x, int y) {
                 if (*celda == ' ' || *celda == 'O') {
                     // Si está vacío, se considera un fallo
                     *celda = 'O'; // Marcamos el fallo en el tablero
-    
                 } else {
                     // Si hay algo, se considera un acierto
                     *celda = 'X'; // Marcamos el acierto en el tablero
@@ -81,7 +78,7 @@ void * disparoGrande(int x, int y) {
 }
 
 // Función de disparo lineal (área de 1x5 o 5x1 dependiendo de la orientación)
-void * disparoLineal(int x, int y) {
+void *disparoLineal(int x, int y) {
     // Verificar que las coordenadas estén dentro de los límites del tablero
     if (x < 1 || x > tamanoTablero || y < 1 || y > tamanoTablero) {
         printf("Coordenadas fuera de los límites del tablero.\n");
@@ -106,7 +103,6 @@ void * disparoLineal(int x, int y) {
                 if (*celda == ' ' || *celda == 'O') {
                     // Si está vacío, se considera un fallo
                     *celda = 'O'; // Marcamos el fallo en el tablero
-    
                 } else {
                     // Si hay algo, se considera un acierto
                     *celda = 'X'; // Marcamos el acierto en el tablero
@@ -121,7 +117,6 @@ void * disparoLineal(int x, int y) {
                 if (*celda == ' ' || *celda == 'O') {
                     // Si está vacío, se considera un fallo
                     *celda = 'O'; // Marcamos el fallo en el tablero
-    
                 } else {
                     // Si hay algo, se considera un acierto
                     *celda = 'X'; // Marcamos el acierto en el tablero
@@ -148,7 +143,7 @@ void *disparoRadar(int x, int y) {
             if (i >= 0 && i < tamanoTablero && j >= 0 && j < tamanoTablero) {
                 char *celda = (char *)tablero[i][j]; // Convertir el puntero a char
                 if (*celda == ' ' || *celda == 'O') {
-                    // Si está vacío, se considera un fallo y se marca con '0'
+                    // Si está vacío, se considera un fallo y se marca con 'O'
                     *celda = 'O';
                 } else { 
                     // Si hay un barco, se marca con 'X'
@@ -169,6 +164,7 @@ void *disparo500KG(int x, int y) {
     int x0 = x - 1;
     int y0 = y - 1;
     flag_500KG_usada = 1; // 0: no usada, 1: usada
+
     // Recorrer el área de efecto 11x11
     for (int i = x0 - 5; i <= x0 + 5; i++) {
         for (int j = y0 - 5; j <= y0 + 5; j++) {
@@ -176,7 +172,7 @@ void *disparo500KG(int x, int y) {
             if (i >= 0 && i < tamanoTablero && j >= 0 && j < tamanoTablero) {
                 char *celda = (char *)tablero[i][j]; // Convertir el puntero a char
                 if (*celda == ' ' || *celda == 'O') {
-                    // Si está vacío, se considera un fallo y se marca con '0'
+                    // Si está vacío, se considera un fallo y se marca con 'O'
                     *celda = 'O';
                 } else { 
                     // Si hay un barco, se marca con 'X'
@@ -189,11 +185,8 @@ void *disparo500KG(int x, int y) {
     return NULL;
 }
 
-
-
 // Array de punteros a funciones para manejar las cartas
 func_ptr funciones[count];
-
 
 // Inicializar el array de funciones con las diferentes cartas disponibles
 void inicializarFunciones() {
@@ -204,24 +197,24 @@ void inicializarFunciones() {
     funciones[_500KG] = disparo500KG;
 }
 
-// Inicializar la mano de cartas
-void inicializarMano() {
-    Cartas.disponibles = 5;
-    Cartas.carta = (void **)malloc(Cartas.disponibles * sizeof(void *));
+// Inicializar el mazo de cartas
+void inicializarMazo() {
+    Cartas.disponibles = 5; // Cantidad inicial de cartas disponibles
+    Cartas.carta = (void **)malloc(Cartas.disponibles * sizeof(void *)); // Asignar memoria para el mazo
     
     if (Cartas.carta == NULL) {
-        perror("Failed to allocate memory");
+        perror("Failed to allocate memory"); // Error al asignar memoria
         exit(EXIT_FAILURE);
     }
 
-    // Inicializa el array de cartas con punteros a funcion Simple
+    // Inicializa el array de cartas con punteros a la función disparoSimple
     for (int i = 0; i < Cartas.disponibles; i++) {
         Cartas.carta[i] = (void *)funciones[0]; // Cast a void *
     }
 }
 
-
-void mostrarMano() {
+// Mostrar el mazo de cartas
+void mostrarMazo() {
     printf("Cartas:\n");
     for (int i = 0; i < Cartas.disponibles; i++) {
         func_ptr f = (func_ptr)Cartas.carta[i]; // Cast a func_ptr
@@ -240,16 +233,16 @@ void mostrarMano() {
         if (i != Cartas.disponibles - 1){
              printf("| ");
         }
-
     }
     printf("\n");
 }
 
+// Función para seleccionar y usar una carta del mazo
 void usarCarta() {
     int seleccion = 0;
 
     while (1) {
-        mostrarMano();
+        mostrarMazo(); // Mostrar el mazo de cartas
         printf("Selecciona una Carta (1-%d): ", Cartas.disponibles);
         scanf("%d", &seleccion);
         seleccion--; // Ajustar a índice basado en 0
@@ -300,12 +293,10 @@ void usarCarta() {
     }
 }
 
-
-
-void liberarMano() {
+// Liberar la memoria asignada al mazo de cartas
+void liberarMazo() {
     free(Cartas.carta);
 }
-
 
 // Función para generar un número aleatorio entre 0 y max (incluido)
 int generarNumeroAleatorio(int max) {
@@ -371,7 +362,7 @@ void cambiarCarta(int indiceCarta, int tipoCarta) {
         Cartas.disponibles--;
         if (Cartas.disponibles <= 0) {
             printf("No hay más cartas disponibles.\n");
-            liberarMano();
+            liberarMazo();
             exit(EXIT_FAILURE);
         }
         for (int i = indiceCarta; i < Cartas.disponibles; i++) {
