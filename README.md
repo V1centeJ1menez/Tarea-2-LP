@@ -17,21 +17,27 @@ TAREA2LP_202373523-k/
 
 ├── src/
 
-│   ├── CityDefender.c         # Archivo principal del programa
+│   ├── CityDefender.c        
 
-│   ├── Tablero.c      # Implementación de las funciones relacionadas con el tablero
+│   ├── Tablero.c             
 
-│   ├── Tablero.h      # Declaraciones de las funciones y estructuras relacionadas con el tablero
+│   ├── Tablero.h    
 
-│   ├── Cartas.c       # Implementación de las funciones relacionadas con las cartas
+│   ├── Cartas.c               
 
-│   ├── Cartas.h       # Declaraciones de las funciones y estructuras relacionadas con las cartas
+│   ├── Cartas.h              
 
-├── README.md          # Documentación del proyecto
+├── README.md          
 
-├── Makefile           # Archivo para automatizar la compilación
+├── Makefile           
 
-
+- **src/CityDefender.c**: Archivo principal del programa.
+- **src/Tablero.c**: Implementación de las funciones relacionadas con el tablero.
+- **src/Tablero.h**: Declaraciones de las funciones y estructuras relacionadas con el tablero.
+- **src/Cartas.c**: Implementación de las funciones relacionadas con las cartas.
+- **src/Cartas.h**: Declaraciones de las funciones y estructuras relacionadas con las cartas.
+- **README.md**: Documentación del proyecto.
+- **Makefile**: Archivo para automatizar la compilación.
 
 ## Compilación y Ejecución
 
