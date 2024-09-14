@@ -145,9 +145,11 @@ void *disparoRadar(int x, int y) {
                 if (*celda == ' ' || *celda == 'O') {
                     // Si está vacío, se considera un fallo y se marca con 'O'
                     *celda = 'O';
-                } else { 
+                } else if (*celda == 'X') { 
                     // Si hay un barco, se marca con 'X'
                     *celda = 'X';
+                } else {
+                    *celda ='!';
                 }
             }
         }
@@ -240,20 +242,25 @@ void mostrarMazo() {
 // Función para seleccionar y usar una carta del mazo
 void usarCarta() {
     int seleccion = 0;
+    int resultado;
 
     while (1) {
         mostrarMazo(); // Mostrar el mazo de cartas
         printf("Selecciona una Carta (1-%d): ", Cartas.disponibles);
-        scanf("%d", &seleccion);
-        seleccion--; // Ajustar a índice basado en 0
+        resultado = scanf("%d", &seleccion);
 
-        // Verificar si la selección es válida
-        if (seleccion < 0 || seleccion >= Cartas.disponibles) {
+        // Verificar si la entrada es válida y si la selección está en rango
+        if (resultado != 1 || seleccion < 1 || seleccion > Cartas.disponibles) {
             printf("Selección inválida. Inténtelo de nuevo.\n");
+
+            // Limpiar el buffer de entrada para evitar bucles infinitos
+            while (getchar() != '\n');
             continue; // Volver a pedir la selección de carta
         }
 
-        func_ptr cartaSeleccionada = (func_ptr)Cartas.carta[seleccion];
+        seleccion--; // Ajustar a índice basado en 0
+        func_ptr cartaSeleccionada = Cartas.carta[seleccion];
+
         // Determinar el tipo de carta actual
         int tipoCarta;
         if (cartaSeleccionada == disparoSimple) {
@@ -274,9 +281,20 @@ void usarCarta() {
         while (1) {
             // Leer coordenadas para el disparo
             printf("Ingrese coordenada X (Fila): ");
-            scanf("%d", &coordenadaX);
+            resultado = scanf("%d", &coordenadaX);
+            if (resultado != 1) {
+                printf("Coordenada X inválida. Inténtelo de nuevo.\n");
+                while (getchar() != '\n');
+                continue;
+            }
+
             printf("Ingrese coordenada Y (Columna): ");
-            scanf("%d", &coordenadaY);
+            resultado = scanf("%d", &coordenadaY);
+            if (resultado != 1) {
+                printf("Coordenada Y inválida. Inténtelo de nuevo.\n");
+                while (getchar() != '\n');
+                continue;
+            }
 
             // Verificar que las coordenadas estén dentro de los límites del tablero
             if (coordenadaX < 1 || coordenadaX > tamanoTablero || coordenadaY < 1 || coordenadaY > tamanoTablero) {

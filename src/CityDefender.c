@@ -23,8 +23,17 @@ int main(int argc, char const *argv[]) {
         
         // Leer la opción ingresada por el usuario
         printf("Ingrese Numero: ");
-        scanf("%d", &opcion);
-        
+        int resultado = scanf("%d", &opcion);
+
+        // Verificar si la entrada es válida y limpiar el buffer si no lo es
+        if (resultado != 1) {
+            printf("Opción no válida. Inténtelo de nuevo.\n");
+
+            // Limpiar el buffer de entrada para evitar bucles infinitos
+            while (getchar() != '\n');
+            continue; // Volver a mostrar el menú
+        }
+
         // Procesar la opción seleccionada y configurar el juego en consecuencia
         switch (opcion) {
             case 1:
@@ -84,7 +93,13 @@ int main(int argc, char const *argv[]) {
 
             // Verificar si se han agotado los turnos
             if (turnosRestantes == 0) {
-                printf("Se han agotado los turnos. Fin del juego.\n");
+                printf("Se han agotado los turnos.\n");
+                if (verificarJuegoTerminado()) {
+                    printf("¡Todos los barcos han sido destruidos! Fin del juego.\n");
+                }
+                else {
+                    printf("No has logrado destruir todos los barcos. Fin del juego.\n");
+                }
 
                 printf("\n--- Tablero Final ---\n");
                 mostrarTableroFinal(); // Mostrar el estado final del tablero

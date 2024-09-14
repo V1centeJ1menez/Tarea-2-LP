@@ -42,7 +42,7 @@ int verificarJuegoTerminado() {
     for (int i = 0; i < tamanoTablero; i++) {
         for (int j = 0; j < tamanoTablero; j++) {
             char celda = *(char *)(tablero[i][j]); // Obtener el contenido de la celda
-            if (celda >= '2' && celda <= '5') {
+            if ((celda >= '2' && celda <= '5') || celda == '!') {
                 // Si hay alguna parte de un barco sin destruir, el juego no ha terminado
                 return 0; // El juego continúa
             }
@@ -115,7 +115,9 @@ void mostrarTableroFinal() {
                 printf("| O "); // Mostrar disparos fallidos
             } else if (celda >= '2' && celda <= '5') {
                 printf("| %c ", celda); // Mostrar partes de barcos no destruidos
-            } else {
+            } else if (celda == '!'){
+                printf("| ! "); //Dibujar celdas vizualizadas
+            } else{
                 printf("|   "); // Dejar en blanco las celdas no disparadas
             }
         }
